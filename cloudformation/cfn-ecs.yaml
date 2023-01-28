@@ -3,19 +3,26 @@ Parameters:
   AWSAccountId:
     Type: String
     Description: AWS Account ID
-  SubnetID:
+
+  VpcCIDR:
     Type: String
+    Default: 10.0.1.0/16
+    Description: vpc cidr for launching our stacks
+
   PrefixName:
     Type: String
+
 Resources:
   Cluster:
     Type: AWS::ECS::Cluster
     Properties:
-      ClusterName: !Join ["-", [!Ref PrefixName, "cluster"]]      
+      ClusterName: !Join ["-", [!Ref PrefixName, "cluster"]]
+      
   LogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Join ["-", [!Ref PrefixName, "log-group"]]
+
   ExecutionRole:
     Type: AWS::IAM::Role
     Properties:
@@ -28,6 +35,37 @@ Resources:
             Action: sts:AssumeRole
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+ 
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VpcCIDR
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      Tags:
+        - Key: cfn-vpc
+          Value: !Join ["-", [!Ref PrefixName, "cfn-vpc"]]
+
+  Subnet1: 
+    Type: "AWS::EC2::Subnet"
+    Properties: 
+      VpcId: 
+        !Ref VPC
+      CidrBlock: 10.0.0.0/24
+      AvailabilityZone: !Select
+          - 0
+          - Fn::GetAZs: !Ref AWS::Region
+
+  Subnet2: 
+    Type: "AWS::EC2::Subnet"
+    Properties: 
+      VpcId: 
+        !Ref VPC
+      CidrBlock: 10.0.0.0/24
+      AvailabilityZone: !Select
+          - 1
+          - Fn::GetAZs: !Ref AWS::Region
+
   ContainerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -37,7 +75,8 @@ Resources:
         - IpProtocol: tcp
           FromPort: 5000
           ToPort: 8881
-          CidrIp: 0.0.0.0/0
+          CidrIp: !GetAtt ALBSecurityGroup.GroupId
+
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition
     Properties:
@@ -76,6 +115,74 @@ Resources:
         AwsvpcConfiguration:
           AssignPublicIp: ENABLED
           Subnets:
-            - !Ref SubnetID
+            - !Ref Subnet1
+            - !Ref Subnet2
           SecurityGroups:
             - !GetAtt ContainerSecurityGroup.GroupId
+
+  ApplicationLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: !Join ["-", [!Ref PrefixName, "alb"]]
+      Scheme: internet-facing
+      Type: application
+      Subnets:
+        - !Ref Subnet1
+        - !Ref Subnet2
+      SecurityGroups:
+        - !Ref ALBSecurityGroup
+      IpAddressType: ipv4
+      LoadBalancerAttributes:
+        - Key: alb
+          Value: !Join ["-", [!Ref PrefixName, "alb"]]
+
+  ALBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: security group for application load balancer
+      GroupName: !Join ["-", [!Ref PrefixName, "alb-sg"]]
+      Tags:
+        - Value: !Join ["-", [!Ref PrefixName, "alb-sg"]]
+          Key: alb-sg
+      VpcId: !Ref VPC
+      SecurityGroupEgress:
+        - CidrIp: "0.0.0.0/0"
+          FromPort: 80
+          IpProtocol: "tcp"
+          ToPort: 80
+        - CidrIp: "0.0.0.0/0"
+          FromPort: 443
+          IpProtocol: "tcp"
+          ToPort: 443
+
+  AppTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckEnabled: true
+      HealthCheckIntervalSeconds: 10
+      HealthCheckPath: /
+      HealthCheckProtocol: HTTP
+      HealthCheckPort: 80
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 2
+      Port: 80
+      Protocol: HTTP
+      Name: !Join ["-", [!Ref PrefixName, "HTTP-Target"]]
+      TargetType: ip
+      VpcId: !Ref VPC
+
+  ListernerRuleForTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref AppTargetGroup
+      Priority: 1
+      Conditions:
+        - Field: http-header
+          HttpHeaderConfig:
+            HttpHeaderName: X-App-Name
+            Values:
+              - py
+      ListenerArn: !Ref ApplicationLoadBalancer
