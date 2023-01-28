@@ -1,0 +1,18 @@
+[
+    {
+      "ParameterKey": "AWSAccountId",
+      "ParameterValue": ""
+    },
+    {
+      "ParameterKey": "AWSECRAdminUser",
+      "ParameterValue": ""
+    },
+    {
+      "ParameterKey": "PrefixName",
+      "ParameterValue": "py-api-image"
+    },
+    {
+      "ParameterKey": "AWSECRRepoName",
+      "ParameterValue": "py-api"
+    }
+  ]
