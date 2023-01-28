@@ -1,0 +1,14 @@
+[
+    {
+      "ParameterKey": "AWSAccountId",
+      "ParameterValue": "430525806551"
+    },  
+    {
+        "ParameterKey": "PrefixName",
+        "ParameterValue": "prod-cfn"
+      },
+    {
+        "ParameterKey": "VpcCIDR",
+        "ParameterValue": "10.0.1.0/16"
+    }
+    ]
