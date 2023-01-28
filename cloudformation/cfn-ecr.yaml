@@ -11,19 +11,19 @@ Parameters:
     Description: ECR Repository Name
   PrefixName:
     Type: String
-    Description: Prefix of all of the resources
+    Description: Prefix for all of the resources
 
 Resources:
-  SimpleRepository:
+  ProdRepository:
     Type: 'AWS::ECR::Repository'
     Properties:
       RepositoryName: !Join ["-", [!Ref PrefixName, "repo"]]
     
 Outputs:
   SimpleECRArn:
-    Description: Your Simple ECR Repository ARN
+    Description: The ECR Repository ARN
     Value: !Join 
       - ''
       - - !GetAtt 
-          - SimpleRepository
+          - ProdRepository
           - Arn  
