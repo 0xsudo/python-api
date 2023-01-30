@@ -1,3 +1,4 @@
+#!/bin/bash
 STACK_NAME=py-api-cf-ecs
 
 if ! aws cloudformation describe-stacks --stack-name $STACK_NAME > /dev/null 2>&1; then
