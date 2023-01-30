@@ -1,6 +1,8 @@
 #!/bin/bash
 STACK_NAME=py-api-cfn-ecr
 
+aws ecr get-login-password --region [AwsRegion] | docker login --username [name] --password-stdin [AwsAccountId].dkr.ecr.[AwsRegion].amazonaws.com
+
 docker tag kaoka/cfn-repo:latest [AccountId].dkr.ecr.us-east-1.amazonaws.com/cfn-repo:latest
 docker push [AccountId].dkr.ecr.us-east-1.amazonaws.com/simple-cf-repo:latest
 
