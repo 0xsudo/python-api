@@ -1,10 +1,10 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='Python-Sample-Application',
+    name='python-api',
     version='0.0.1',
     author='Uber Engineering',
-    author_email='developer@uber.com',
+    author_email='kaokaonchangwakelvin@gmail.com',
     packages=find_packages(),
-    description='Python sample application',
+    description='api to be pushed to production',
 )
