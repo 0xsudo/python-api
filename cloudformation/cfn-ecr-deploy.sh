@@ -1,5 +1,5 @@
 #!/bin/bash
-STACK_NAME=py-api-cfn-ecr
+STACK_NAME=cfn-ecr-py-api
 
 aws ecr get-login-password --region [AwsRegion] | docker login --username [name] --password-stdin [AwsAccountId].dkr.ecr.[AwsRegion].amazonaws.com
 
