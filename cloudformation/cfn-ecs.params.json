@@ -5,7 +5,7 @@
     },  
     {
         "ParameterKey": "PrefixName",
-        "ParameterValue": "prod-cfn"
+        "ParameterValue": "py-api"
       },
     {
         "ParameterKey": "VpcCIDR",
