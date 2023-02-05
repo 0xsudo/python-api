@@ -1,5 +1,5 @@
 #!/bin/bash
-STACK_NAME=py-api-cf-ecs
+STACK_NAME=cfn-ecs-py-api
 
 if ! aws cloudformation describe-stacks --stack-name $STACK_NAME > /dev/null 2>&1; then
     aws cloudformation create-stack --stack-name $STACK_NAME --template-body file://cf-ecs.yml --parameters file://cf-ecs.params.json --capabilities CAPABILITY_NAMED_IAM 
