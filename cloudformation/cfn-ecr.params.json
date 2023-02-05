@@ -9,10 +9,10 @@
     },
     {
       "ParameterKey": "PrefixName",
-      "ParameterValue": "py-api-image"
+      "ParameterValue": "py-api"
     },
     {
       "ParameterKey": "AWSECRRepoName",
-      "ParameterValue": "py-api"
+      "ParameterValue": "ecr-repo"
     }
   ]
