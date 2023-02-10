@@ -15,14 +15,20 @@ jobs:
           python-version: '3.9'
           cache: 'pip' # caching pip dependencies
 
-      - name: install dependencies
+      - name: Install dependencies
         run: pip install -r /app/requirements.txt
 
       - name: Docker build and run
         run: |
-          docker build -f app/Dockerfile -t kaokakelvin/cfn-repo:latest .
-          docker run -dit --name py-api-container -p 80:7000 kaokakelvin/cfn-repo:latest
+          docker build -f app/Dockerfile -t kaokakelvin/py-api-ecr-repo:latest .
+          docker run -dit --name py-api-container -p 80:7000 kaokakelvin/py-api-ecr-repo:latest
 
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
