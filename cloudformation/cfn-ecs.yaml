@@ -87,7 +87,7 @@ Resources:
       ExecutionRoleArn: !Ref ExecutionRole
       ContainerDefinitions:
         - Name: !Join ["-", [!Ref PrefixName, "container"]]  
-          #Image: 430525806551.dkr.ecr.us-east-1.amazonaws.com/simple-cf-repo:latest
+          #Image: [id].dkr.ecr.[region].amazonaws.com/simple-cf-repo:latest
           Image: !Join ["", [!Ref AWSAccountId, ".dkr.ecr.",!Ref 'AWS::Region','.amazonaws.com/',!Ref PrefixName, "-","repo"]]
           PortMappings:
             - ContainerPort: 5000

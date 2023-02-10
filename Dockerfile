@@ -1,6 +1,9 @@
 FROM python:latest
 
+USER 1000
+
 RUN mkdir /build
+
 WORKDIR /build
 
 COPY app /build
