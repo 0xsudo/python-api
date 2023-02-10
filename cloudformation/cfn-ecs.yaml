@@ -7,10 +7,16 @@ Parameters:
   VpcCIDR:
     Type: String
     Default: 10.0.1.0/16
-    Description: vpc cidr for launching our stacks
+    Description: VPC cidr for launching our stacks
 
   PrefixName:
     Type: String
+    Description: Prefixes all the resources we create
+
+  AWSECRRepoName:
+    Type: String
+    Default: ecr-repo
+    Description: Name for our ECR repo
 
 Resources:
   Cluster:
@@ -84,11 +90,11 @@ Resources:
       Cpu: 256
       Memory: 512
       NetworkMode: awsvpc
-      ExecutionRoleArn: !Ref ExecutionRole
+      ExecutionRoleArn: !GetAtt ExecutionRole.Arn
       ContainerDefinitions:
         - Name: !Join ["-", [!Ref PrefixName, "container"]]  
-          #Image: [id].dkr.ecr.[region].amazonaws.com/simple-cf-repo:latest
-          Image: !Join ["", [!Ref AWSAccountId, ".dkr.ecr.",!Ref 'AWS::Region','.amazonaws.com/',!Ref PrefixName, "-","repo"]]
+          #Image: [id].dkr.ecr.[region].amazonaws.com/our-cf-repo:latest
+          Image: !Join ["", [!Ref AWSAccountId,".dkr.ecr.",!Ref 'AWS::Region','.amazonaws.com/',!Ref PrefixName, "-",!Ref AWSECRRepoName]]
           PortMappings:
             - ContainerPort: 5000
             # due a bug in CDK we can't do this map, so we will have to use same port 5000
