@@ -1,11 +1,11 @@
 [
     {
       "ParameterKey": "AWSAccountId",
-      "ParameterValue": ""
+      "ParameterValue": "636181284446"
     },
     {
       "ParameterKey": "AWSECRAdminUser",
-      "ParameterValue": ""
+      "ParameterValue": "devopsrole"
     },
     {
       "ParameterKey": "PrefixName",
