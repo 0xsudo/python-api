@@ -4,11 +4,15 @@
       "ParameterValue": "636181284446"
     },  
     {
-        "ParameterKey": "PrefixName",
-        "ParameterValue": "py-api"
-      },
+      "ParameterKey": "PrefixName",
+      "ParameterValue": "py-api"
+    },
     {
-        "ParameterKey": "VpcCIDR",
-        "ParameterValue": "10.0.1.0/16"
+      "ParameterKey": "VpcCIDR",
+      "ParameterValue": "10.0.1.0/16"
+    },
+    {
+      "ParameterKey": "AWSECRRepoName",
+      "ParameterValue": "ecr-repo"
     }
-    ]
+  ]
