@@ -16,7 +16,7 @@ docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_NAME:latest
 
 #checks if stack exists and either creates or updates it according to findings
 if ! aws cloudformation describe-stacks --stack-name $STACK_NAME > /dev/null 2>&1; then
-    aws cloudformation create-stack --stack-name $STACK_NAME --template-body file://cfn-ecr.yaml --parameters file://cfn-ecr.params.json --capabilities CAPABILITY_NAMED_IAM 
+    aws cloudformation create-stack --stack-name $STACK_NAME --template-body file://cloudformation/cfn-ecr.yaml --parameters file://cloudformation/cfn-ecr.params.json --capabilities CAPABILITY_NAMED_IAM 
 else
-    aws cloudformation update-stack --stack-name $STACK_NAME --template-body file://cfn-ecr.yaml --parameters file://cfn-ecr.params.json --capabilities CAPABILITY_NAMED_IAM 
+    aws cloudformation update-stack --stack-name $STACK_NAME --template-body file://cloudformation/cfn-ecr.yaml --parameters file://cloudformation/cfn-ecr.params.json --capabilities CAPABILITY_NAMED_IAM 
 fi
