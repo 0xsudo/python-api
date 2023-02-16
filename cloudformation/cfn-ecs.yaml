@@ -129,43 +129,42 @@ Resources:
             - !GetAtt ContainerSecurityGroup.GroupId
       LoadBalancers:
         - ContainerName: !Ref TaskDefinition
-          ContainerPort: !Ref TaskDefinition
           TargetGroupArn: !Ref AppTargetGroup
 
-  ApplicationLoadBalancer:
-    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
-    Properties:
-      Name: !Join ["-", [!Ref PrefixName, "alb"]]
-      Scheme: internet-facing
-      Type: application
-      Subnets:
-        - !Ref Subnet1
-        - !Ref Subnet2
-      SecurityGroups:
-        - !Ref ALBSecurityGroup
-      IpAddressType: ipv4
-      LoadBalancerAttributes:
-        - Key: alb
-          Value: !Join ["-", [!Ref PrefixName, "alb"]]
+  # ApplicationLoadBalancer:
+  #   Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+  #   Properties:
+  #     Name: !Join ["-", [!Ref PrefixName, "alb"]]
+  #     Scheme: internet-facing
+  #     Type: application
+  #     Subnets:
+  #       - !Ref Subnet1
+  #       - !Ref Subnet2
+  #     SecurityGroups:
+  #       - !Ref ALBSecurityGroup
+  #     IpAddressType: ipv4
+  #     LoadBalancerAttributes:
+  #       - Key: alb
+  #         Value: !Join ["-", [!Ref PrefixName, "alb"]]
 
-  ALBSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: security group for application load balancer
-      GroupName: !Join ["-", [!Ref PrefixName, "alb-sg"]]
-      Tags:
-        - Value: !Join ["-", [!Ref PrefixName, "alb-sg"]]
-          Key: alb-sg
-      VpcId: !Ref VPC
-      SecurityGroupEgress:
-        - CidrIp: "0.0.0.0/0"
-          FromPort: 80
-          IpProtocol: "tcp"
-          ToPort: 80
-        - CidrIp: "0.0.0.0/0"
-          FromPort: 443
-          IpProtocol: "tcp"
-          ToPort: 443
+  # ALBSecurityGroup:
+  #   Type: AWS::EC2::SecurityGroup
+  #   Properties:
+  #     GroupDescription: security group for application load balancer
+  #     GroupName: !Join ["-", [!Ref PrefixName, "alb-sg"]]
+  #     Tags:
+  #       - Value: !Join ["-", [!Ref PrefixName, "alb-sg"]]
+  #         Key: alb-sg
+  #     VpcId: !Ref VPC
+  #     SecurityGroupEgress:
+  #       - CidrIp: "0.0.0.0/0"
+  #         FromPort: 80
+  #         IpProtocol: "tcp"
+  #         ToPort: 80
+  #       - CidrIp: "0.0.0.0/0"
+  #         FromPort: 443
+  #         IpProtocol: "tcp"
+  #         ToPort: 443
 
   AppTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
@@ -184,17 +183,17 @@ Resources:
       TargetType: ip
       VpcId: !Ref VPC
 
-  ListernerRuleForTargetGroup:
-    Type: AWS::ElasticLoadBalancingV2::ListenerRule
-    Properties:
-      Actions:
-        - Type: forward
-          TargetGroupArn: !Ref AppTargetGroup
-      Priority: 1
-      Conditions:
-        - Field: http-header
-          HttpHeaderConfig:
-            HttpHeaderName: X-App-Name
-            Values:
-              - app
-      ListenerArn: !Ref ApplicationLoadBalancer
+  # ListernerRuleForTargetGroup:
+  #   Type: AWS::ElasticLoadBalancingV2::ListenerRule
+  #   Properties:
+  #     Actions:
+  #       - Type: forward
+  #         TargetGroupArn: !Ref AppTargetGroup
+  #     Priority: 1
+  #     Conditions:
+  #       - Field: http-header
+  #         HttpHeaderConfig:
+  #           HttpHeaderName: X-App-Name
+  #           Values:
+  #             - app
+  #     ListenerArn: !Ref ApplicationLoadBalancer
