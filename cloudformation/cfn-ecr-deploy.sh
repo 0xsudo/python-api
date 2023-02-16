@@ -10,8 +10,8 @@ IMAGE_NAME=py-api-ecr-repo
 #login to ECR using DockerHub
 aws ecr get-login-password --region $AWS_REGION | docker login --username $DOCKER_USERNAME --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
 
-#tag and push our image to ECR
-docker tag $DOCKER_USERNAME/$IMAGE_NAME:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_NAME:latest
+#push our image to ECR
+#docker tag $DOCKER_USERNAME/$IMAGE_NAME:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_NAME:latest
 docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_NAME:latest
 
 #checks if stack exists and either creates or updates it according to findings
