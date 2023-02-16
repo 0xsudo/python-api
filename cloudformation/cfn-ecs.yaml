@@ -110,6 +110,7 @@ Resources:
       RequiresCompatibilities:
         - EC2
         - FARGATE
+
   Service:
     Type: AWS::ECS::Service
     Properties:
@@ -127,7 +128,9 @@ Resources:
           SecurityGroups:
             - !GetAtt ContainerSecurityGroup.GroupId
       LoadBalancers:
-       - LoadBalancerName: !Ref ApplicationLoadBalancer
+        - ContainerName: !Ref TaskDefinition
+          ContainerPort: !Ref TaskDefinition
+          TargetGroupArn: !Ref AppTargetGroup
 
   ApplicationLoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
