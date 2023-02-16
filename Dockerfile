@@ -1,7 +1,5 @@
 FROM python:latest
 
-#USER 1000
-
 RUN mkdir /build
 
 WORKDIR /build
@@ -9,6 +7,8 @@ WORKDIR /build
 COPY app /build
 
 COPY app/requirements.txt /build
+
+USER 1000
 
 RUN pip install -r requirements.txt
 
