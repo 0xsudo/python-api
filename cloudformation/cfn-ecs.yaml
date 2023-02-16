@@ -82,7 +82,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: 7000
           ToPort: 7000
-          CidrIp: !!Ref TaskDefinition
+          CidrIp: !Ref TaskDefinition
 
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition
