@@ -67,7 +67,7 @@ Resources:
     Properties: 
       VpcId: 
         !Ref VPC
-      CidrBlock: 10.0.0.0/24
+      CidrBlock: 10.0.1.0/24
       AvailabilityZone: !Select
           - 1
           - Fn::GetAZs: !Ref AWS::Region
