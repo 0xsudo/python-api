@@ -190,5 +190,5 @@ Resources:
           HttpHeaderConfig:
             HttpHeaderName: X-App-Name
             Values:
-              - py
+              - app
       ListenerArn: !Ref ApplicationLoadBalancer
