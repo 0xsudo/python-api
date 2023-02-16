@@ -82,7 +82,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: 7000
           ToPort: 7000
-          CidrIp: !Ref TaskDefinition
+          CidrIp: !GetAtt ALBSecurityGroup.GroupId
 
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition
@@ -131,40 +131,40 @@ Resources:
         - ContainerName: !Ref TaskDefinition
           TargetGroupArn: !Ref AppTargetGroup
 
-  # ApplicationLoadBalancer:
-  #   Type: AWS::ElasticLoadBalancingV2::LoadBalancer
-  #   Properties:
-  #     Name: !Join ["-", [!Ref PrefixName, "alb"]]
-  #     Scheme: internet-facing
-  #     Type: application
-  #     Subnets:
-  #       - !Ref Subnet1
-  #       - !Ref Subnet2
-  #     SecurityGroups:
-  #       - !Ref ALBSecurityGroup
-  #     IpAddressType: ipv4
-  #     LoadBalancerAttributes:
-  #       - Key: alb
-  #         Value: !Join ["-", [!Ref PrefixName, "alb"]]
+  ApplicationLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: !Join ["-", [!Ref PrefixName, "alb"]]
+      Scheme: internet-facing
+      Type: application
+      Subnets:
+        - !Ref Subnet1
+        - !Ref Subnet2
+      SecurityGroups:
+        - !Ref ALBSecurityGroup
+      IpAddressType: ipv4
+      LoadBalancerAttributes:
+        - Key: alb
+          Value: !Join ["-", [!Ref PrefixName, "alb"]]
 
-  # ALBSecurityGroup:
-  #   Type: AWS::EC2::SecurityGroup
-  #   Properties:
-  #     GroupDescription: security group for application load balancer
-  #     GroupName: !Join ["-", [!Ref PrefixName, "alb-sg"]]
-  #     Tags:
-  #       - Value: !Join ["-", [!Ref PrefixName, "alb-sg"]]
-  #         Key: alb-sg
-  #     VpcId: !Ref VPC
-  #     SecurityGroupEgress:
-  #       - CidrIp: "0.0.0.0/0"
-  #         FromPort: 80
-  #         IpProtocol: "tcp"
-  #         ToPort: 80
-  #       - CidrIp: "0.0.0.0/0"
-  #         FromPort: 443
-  #         IpProtocol: "tcp"
-  #         ToPort: 443
+  ALBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: security group for application load balancer
+      GroupName: !Join ["-", [!Ref PrefixName, "alb-sg"]]
+      Tags:
+        - Value: !Join ["-", [!Ref PrefixName, "alb-sg"]]
+          Key: alb-sg
+      VpcId: !Ref VPC
+      SecurityGroupEgress:
+        - CidrIp: "0.0.0.0/0"
+          FromPort: 80
+          IpProtocol: "tcp"
+          ToPort: 80
+        - CidrIp: "0.0.0.0/0"
+          FromPort: 443
+          IpProtocol: "tcp"
+          ToPort: 443
 
   AppTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
@@ -196,4 +196,4 @@ Resources:
             HttpHeaderName: X-App-Name
             Values:
               - app
-      #ListenerArn: !Ref ApplicationLoadBalancer
+      ListenerArn: !Ref ApplicationLoadBalancer
