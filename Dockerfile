@@ -8,10 +8,10 @@ COPY app /build
 
 COPY app/requirements.txt /build
 
-USER 1000
-
 RUN pip install -r requirements.txt
 
 EXPOSE 7000
+
+USER 1000
 
 CMD [ "python", "app.py" ]
