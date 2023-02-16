@@ -11,6 +11,7 @@ Parameters:
 
   PrefixName:
     Type: String
+    Default: py-api
     Description: Prefixes all the resources we create
 
   AWSECRRepoName:
@@ -76,11 +77,11 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupName: ContainerSecurityGroup
-      GroupDescription: Security group for dotnet6  container
+      GroupDescription: Security group for python container
       SecurityGroupIngress:
         - IpProtocol: tcp
-          FromPort: 5000
-          ToPort: 8881
+          FromPort: 7000
+          ToPort: 7000
           CidrIp: !GetAtt ALBSecurityGroup.GroupId
 
   TaskDefinition:
@@ -94,10 +95,10 @@ Resources:
       ContainerDefinitions:
         - Name: !Join ["-", [!Ref PrefixName, "container"]]  
           #Image: [id].dkr.ecr.[region].amazonaws.com/our-cf-repo:latest
-          Image: !Join ["", [!Ref AWSAccountId,".dkr.ecr.",!Ref 'AWS::Region','.amazonaws.com/',!Ref PrefixName, "-",!Ref AWSECRRepoName]]
+          Image: !Join ["", [!Ref AWSAccountId,".dkr.ecr.",!Ref AWS::Region,".amazonaws.com/",!Ref PrefixName,"-",!Ref AWSECRRepoName,":","latest"]]
           PortMappings:
             - ContainerPort: 7000
-            # due a bug in CDK we can't do this map, so we will have to use same port 5000
+            # due a bug in CDK we can't do this map, so we will have to use same port
             # - HostPort: 8881 
             # - Protocol: tcp
           LogConfiguration:
