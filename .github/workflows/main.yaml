@@ -16,11 +16,11 @@ jobs:
           cache: 'pip' # caching pip dependencies
 
       - name: Install dependencies
-        run: pip install -r ../../app/requirements.txt
+        run: pip install -r app/requirements.txt
 
       - name: Docker build and run
         run: |
-          docker build -f ../../app/Dockerfile -t kaokakelvin/py-api-ecr-repo:latest .
+          docker build -f app/Dockerfile -t kaokakelvin/py-api-ecr-repo:latest .
           docker run -dit --name py-api-container -p 80:7000 kaokakelvin/py-api-ecr-repo:latest
 
   deploy:
