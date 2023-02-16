@@ -126,6 +126,8 @@ Resources:
             - !Ref Subnet2
           SecurityGroups:
             - !GetAtt ContainerSecurityGroup.GroupId
+      LoadBalancers:
+       - LoadBalancerName: !Ref ApplicationLoadBalancer
 
   ApplicationLoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
