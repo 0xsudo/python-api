@@ -5,7 +5,7 @@ STACK_NAME=cfn-ecr-py-api
 AWS_REGION=us-east-1
 DOCKER_USERNAME=kaokakelvin
 AWS_ACCOUNT_ID=636181284446
-IMAGE_NAME=py-api-ecr-repo
+IMAGE_NAME=py-api
 
 #login to ECR using DockerHub
 aws ecr get-login-password --region $AWS_REGION | docker login --username $DOCKER_USERNAME --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
