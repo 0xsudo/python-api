@@ -96,7 +96,7 @@ Resources:
           #Image: [id].dkr.ecr.[region].amazonaws.com/our-cf-repo:latest
           Image: !Join ["", [!Ref AWSAccountId,".dkr.ecr.",!Ref 'AWS::Region','.amazonaws.com/',!Ref PrefixName, "-",!Ref AWSECRRepoName]]
           PortMappings:
-            - ContainerPort: 5000
+            - ContainerPort: 7000
             # due a bug in CDK we can't do this map, so we will have to use same port 5000
             # - HostPort: 8881 
             # - Protocol: tcp
