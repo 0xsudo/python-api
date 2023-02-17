@@ -95,7 +95,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: 7000
           ToPort: 7000
-          CidrIp: !GetAtt ALBSecurityGroup.GroupId
+          SourceSecurityGroupName: !Ref ALBSecurityGroup
 
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition
