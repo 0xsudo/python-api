@@ -94,13 +94,10 @@ Resources:
       ExecutionRoleArn: !GetAtt ExecutionRole.Arn
       ContainerDefinitions:
         - Name: !Join ["-", [!Ref PrefixName, "container"]]  
-          #Image: [id].dkr.ecr.[region].amazonaws.com/our-cf-repo:latest
+          #Image: [id].dkr.ecr.[region].amazonaws.com/our-cfn-repo:latest
           Image: !Join ["", [!Ref AWSAccountId,".dkr.ecr.",!Ref AWS::Region,".amazonaws.com/",!Ref PrefixName,"-",!Ref AWSECRRepoName,":","latest"]]
           PortMappings:
             - ContainerPort: 7000
-            # due a bug in CDK we can't do this map, so we will have to use same port
-            # - HostPort: 8881 
-            # - Protocol: tcp
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -131,41 +128,6 @@ Resources:
         - ContainerName: !Ref TaskDefinition
           TargetGroupArn: !Ref AppTargetGroup
 
-  ApplicationLoadBalancer:
-    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
-    Properties:
-      Name: !Join ["-", [!Ref PrefixName, "alb"]]
-      Scheme: internet-facing
-      Type: application
-      Subnets:
-        - !Ref Subnet1
-        - !Ref Subnet2
-      SecurityGroups:
-        - !Ref ALBSecurityGroup
-      IpAddressType: ipv4
-      LoadBalancerAttributes:
-        - Key: alb
-          Value: !Join ["-", [!Ref PrefixName, "alb"]]
-
-  ALBSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: security group for application load balancer
-      GroupName: !Join ["-", [!Ref PrefixName, "alb-sg"]]
-      Tags:
-        - Value: !Join ["-", [!Ref PrefixName, "alb-sg"]]
-          Key: alb-sg
-      VpcId: !Ref VPC
-      SecurityGroupEgress:
-        - CidrIp: "0.0.0.0/0"
-          FromPort: 80
-          IpProtocol: "tcp"
-          ToPort: 80
-        - CidrIp: "0.0.0.0/0"
-          FromPort: 443
-          IpProtocol: "tcp"
-          ToPort: 443
-
   AppTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
@@ -177,6 +139,7 @@ Resources:
       HealthCheckTimeoutSeconds: 5
       HealthyThresholdCount: 2
       UnhealthyThresholdCount: 2
+      IpAddressType: ipv4
       Port: 80
       Protocol: HTTP
       Name: !Join ["-", [!Ref PrefixName, "HTTP-Target"]]
@@ -196,4 +159,64 @@ Resources:
             HttpHeaderName: X-App-Name
             Values:
               - app
-      ListenerArn: !Ref ApplicationLoadBalancer
+      ListenerArn: !Ref HTTPListner
+
+  HTTPListner:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: redirect
+          RedirectConfig:
+            StatusCode: HTTP_301
+            Protocol: HTTPS
+            Port: 443
+            Host: "#{host}"
+            Path: /#{path}
+            Query: "#{query}"
+      LoadBalancerArn: !Ref ApplicationLoadBalancer
+      Port: 80
+      Protocol: HTTP
+
+  ALBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: security group for application load balancer
+      GroupName: !Join ["-", [!Ref PrefixName, "alb-sg"]]
+      Tags:
+        - Value: !Join ["-", [!Ref PrefixName, "alb-sg"]]
+          Key: alb-sg
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - CidrIp: "0.0.0.0/0"
+          FromPort: 80
+          IpProtocol: "tcp"
+          ToPort: 80
+        - CidrIp: "0.0.0.0/0"
+          FromPort: 443
+          IpProtocol: "tcp"
+          ToPort: 443
+
+  ApplicationLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: !Join ["-", [!Ref PrefixName, "alb"]]
+      Scheme: internet-facing
+      Type: application
+      Subnets:
+        - !Ref Subnet1
+        - !Ref Subnet2
+      SecurityGroups:
+        - !Ref ALBSecurityGroup
+      IpAddressType: ipv4
+      Tags:
+        - Key: alb
+          Value: !Join ["-", [!Ref PrefixName, "alb"]]
