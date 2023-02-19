@@ -157,8 +157,10 @@ Resources:
       Port: 7000
       Protocol: HTTP
       Name: !Join ["-", [!Ref PrefixName, "HTTP-Target"]]
-      TargetType: ip
+      TargetType: alb
       VpcId: !Ref VPC
+      Targets:
+        - Id: !GetAtt ApplicationLoadBalancer.LoadBalancerName
 
   ListernerRuleForTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
