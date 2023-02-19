@@ -138,7 +138,7 @@ Resources:
           SecurityGroups:
             - !Ref ALBSecurityGroup
       LoadBalancers:
-        - ContainerName: !Ref TaskDefinition
+        - ContainerName: !Join ["-", [!Ref PrefixName, "container"]]
           TargetGroupArn: !Ref AppTargetGroup
           ContainerPort: 7000
 
