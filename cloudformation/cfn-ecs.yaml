@@ -155,7 +155,7 @@ Resources:
       UnhealthyThresholdCount: 2
       IpAddressType: ipv4
       Port: 7000
-      #Protocol: HTTP
+      Protocol: HTTPS
       Name: !Join ["-", [!Ref PrefixName, "HTTP-Target"]]
       TargetType: alb
       VpcId: !Ref VPC
