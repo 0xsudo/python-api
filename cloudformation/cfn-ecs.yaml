@@ -140,6 +140,7 @@ Resources:
       LoadBalancers:
         - ContainerName: !Ref TaskDefinition
           TargetGroupArn: !Ref AppTargetGroup
+          ContainerPort: 7000
 
   AppTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
