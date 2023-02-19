@@ -160,7 +160,7 @@ Resources:
       TargetType: ip
       VpcId: !Ref VPC
       Targets:
-        - Id: 10.0.0.0/8
+        - Id: 10.0.1.1
 
   ListernerRuleForTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
