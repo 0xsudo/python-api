@@ -155,9 +155,9 @@ Resources:
       UnhealthyThresholdCount: 2
       IpAddressType: ipv4
       Port: 7000
-      Protocol: HTTPS
+      Protocol: HTTP
       Name: !Join ["-", [!Ref PrefixName, "HTTP-Target"]]
-      TargetType: alb
+      TargetType: ip
       VpcId: !Ref VPC
       Targets:
         - Id: !GetAtt ApplicationLoadBalancer.LoadBalancerName
