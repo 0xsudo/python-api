@@ -114,7 +114,7 @@ Resources:
       ContainerDefinitions:
         - Name: !Join ["-", [!Ref PrefixName, "container"]]  
           #Image: [id].dkr.ecr.[region].amazonaws.com/our-cfn-repo:latest
-          Image: !Join ["", [!Ref AWSAccountId,".dkr.ecr.",!Ref AWS::Region,".amazonaws.com/",!Ref PrefixName,"-",!Ref AWSECRRepoName,":","latest"]]
+          Image: !Join ["", [!Ref AWSAccountId,".dkr.ecr",!Ref AWS::Region,".amazonaws.com/",!Ref PrefixName,"-",!Ref AWSECRRepoName,":","latest"]]
           PortMappings:
             - ContainerPort: 7000
           LogConfiguration:
