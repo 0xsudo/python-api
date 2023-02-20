@@ -212,7 +212,7 @@ Resources:
             Path: /#{path}
             Query: "#{query}"
       LoadBalancerArn: !Ref ApplicationLoadBalancer
-      Port: 7000
+      Port: 80
       Protocol: HTTP
 
   ListernerRuleForTargetGroup:
