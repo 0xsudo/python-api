@@ -3,7 +3,7 @@
 #define our environment variables
 STACK_NAME=cfn-ecr-py-api
 AWS_REGION=us-east-1
-DOCKER_USERNAME=kaokakelvin
+DOCKER_USERNAME=AWS
 AWS_ACCOUNT_ID=636181284446
 IMAGE_NAME=py-api-ecr-repo
 
@@ -11,7 +11,7 @@ IMAGE_NAME=py-api-ecr-repo
 aws ecr get-login-password --region $AWS_REGION | docker login --username $DOCKER_USERNAME --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
 
 #push our image to ECR
-#docker tag $DOCKER_USERNAME/$IMAGE_NAME:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_NAME:latest
+docker tag $IMAGE_NAME:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_NAME:latest
 docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_NAME:latest
 
 #checks if stack exists and either creates or updates it according to findings
