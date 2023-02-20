@@ -11,7 +11,7 @@ TAG=latest
 aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
 
 #build our image
-docker build -t $IMAGE_NAME:$TAG .
+docker build -t $IMAGE_NAME .
 
 #push our image to ECR
 docker tag $IMAGE_NAME:$TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_NAME:$TAG
