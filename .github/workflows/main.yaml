@@ -27,7 +27,7 @@ jobs:
 
       - name: Docker build
         run: |
-          docker build -t kaokakelvin/py-api-ecr-repo:latest .
+          docker build -t py-api-ecr-repo:latest .
 
       - name: Build ECR stack
         run: bash cloudformation/cfn-ecr-deploy.sh
