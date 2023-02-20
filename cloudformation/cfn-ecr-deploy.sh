@@ -3,12 +3,11 @@
 #define our environment variables
 STACK_NAME=cfn-ecr-py-api
 AWS_REGION=us-east-1
-DOCKER_USERNAME=AWS
 AWS_ACCOUNT_ID=636181284446
 IMAGE_NAME=py-api-ecr-repo
 
 #login to ECR using DockerHub
-aws ecr get-login-password --region $AWS_REGION | docker login --username $DOCKER_USERNAME --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
 
 #push our image to ECR
 docker tag $IMAGE_NAME:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_NAME:latest
