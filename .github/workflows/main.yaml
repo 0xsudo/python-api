@@ -25,10 +25,9 @@ jobs:
       - name: Install dependencies
         run: pip install -r app/requirements.txt
 
-      - name: Docker build and run
+      - name: Docker build
         run: |
-          docker build -t kaokakelvin/py-api-ecr-repo:latest -t 636181284446.dkr.ecr.us-east-1.amazonaws.com/py-api-ecr-repo:latest .
-          docker run -dit --name py-api-container -p 80:7000 kaokakelvin/py-api-ecr-repo:latest
+          docker build -t kaokakelvin/py-api-ecr-repo:latest .
 
       - name: Build ECR stack
         run: bash cloudformation/cfn-ecr-deploy.sh
