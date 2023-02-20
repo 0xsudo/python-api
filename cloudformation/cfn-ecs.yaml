@@ -91,11 +91,17 @@ Resources:
     Properties:
       GroupName: ContainerSecurityGroup
       GroupDescription: Security group for python container
+      VpcId: !Ref VPC
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 7000
           ToPort: 7000
-          SourceSecurityGroupName: !Ref ALBSecurityGroup
+          SourceSecurityGroupId: !GetAtt ALBSecurityGroup.GroupId
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 7000
+          ToPort: 7000
+          CidrIp: 0.0.0.0/0
 
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition
@@ -118,7 +124,6 @@ Resources:
               awslogs-group: !Ref LogGroup
               awslogs-stream-prefix: ecs
       RequiresCompatibilities:
-        - EC2
         - FARGATE
 
   Service:
@@ -142,40 +147,57 @@ Resources:
           TargetGroupArn: !Ref AppTargetGroup
           ContainerPort: 7000
 
-  AppTargetGroup:
-    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+  ALBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
     Properties:
-      HealthCheckEnabled: true
-      HealthCheckIntervalSeconds: 10
-      HealthCheckPath: /
-      HealthCheckProtocol: HTTP
-      HealthCheckPort: 7000
-      HealthCheckTimeoutSeconds: 5
-      HealthyThresholdCount: 2
-      UnhealthyThresholdCount: 2
-      IpAddressType: ipv4
-      Port: 7000
-      Protocol: HTTP
-      Name: !Join ["-", [!Ref PrefixName, "HTTP-Target"]]
-      TargetType: ip
+      GroupDescription: security group for application load balancer
+      GroupName: !Join ["-", [!Ref PrefixName, "alb-sg"]]
+      Tags:
+        - Value: !Join ["-", [!Ref PrefixName, "alb-sg"]]
+          Key: alb-sg
       VpcId: !Ref VPC
-      Targets:
-        - Id: 10.0.1.1
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 7000
+          ToPort: 7000
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          FromPort: 80
+          IpProtocol: tcp
+          ToPort: 80
+        - CidrIp: 0.0.0.0/0
+          FromPort: 443
+          IpProtocol: tcp
+          ToPort: 443
+        - IpProtocol: tcp
+          FromPort: 7000
+          ToPort: 7000
+          CidrIp: 0.0.0.0/0
 
-  ListernerRuleForTargetGroup:
-    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+  ApplicationLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
-      Actions:
-        - Type: forward
-          TargetGroupArn: !Ref AppTargetGroup
-      Priority: 1
-      Conditions:
-        - Field: http-header
-          HttpHeaderConfig:
-            HttpHeaderName: X-App-Name
-            Values:
-              - app
-      ListenerArn: !Ref HTTPListner
+      Name: !Join ["-", [!Ref PrefixName, "alb"]]
+      Scheme: internet-facing
+      Type: application
+      Subnets:
+        - !Ref Subnet1
+        - !Ref Subnet2
+      SecurityGroups:
+        - !Ref ALBSecurityGroup
+      IpAddressType: ipv4
+      Tags:
+        - Key: alb
+          Value: !Join ["-", [!Ref PrefixName, "alb"]]
 
   HTTPListner:
     Type: AWS::ElasticLoadBalancingV2::Listener
@@ -193,46 +215,37 @@ Resources:
       Port: 7000
       Protocol: HTTP
 
-  ALBSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
+  ListernerRuleForTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
     Properties:
-      GroupDescription: security group for application load balancer
-      GroupName: !Join ["-", [!Ref PrefixName, "alb-sg"]]
-      Tags:
-        - Value: !Join ["-", [!Ref PrefixName, "alb-sg"]]
-          Key: alb-sg
-      VpcId: !Ref VPC
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 7000
-          ToPort: 7000
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: 443
-          ToPort: 443
-          CidrIp: 0.0.0.0/0
-      SecurityGroupEgress:
-        - CidrIp: 0.0.0.0/0
-          FromPort: 7000
-          IpProtocol: tcp
-          ToPort: 7000
-        - CidrIp: 0.0.0.0/0
-          FromPort: 443
-          IpProtocol: tcp
-          ToPort: 443
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref AppTargetGroup
+      Priority: 1
+      Conditions:
+        - Field: http-header
+          HttpHeaderConfig:
+            HttpHeaderName: X-App-Name
+            Values:
+              - app
+      ListenerArn: !Ref HTTPListner
 
-  ApplicationLoadBalancer:
-    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+  AppTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    DependsOn:
+      - ApplicationLoadBalancer
     Properties:
-      Name: !Join ["-", [!Ref PrefixName, "alb"]]
-      Scheme: internet-facing
-      Type: application
-      Subnets:
-        - !Ref Subnet1
-        - !Ref Subnet2
-      SecurityGroups:
-        - !Ref ALBSecurityGroup
+      HealthCheckEnabled: true
+      HealthCheckIntervalSeconds: 10
+      HealthCheckPath: /
+      HealthCheckProtocol: HTTP
+      HealthCheckPort: 7000
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 2
       IpAddressType: ipv4
-      Tags:
-        - Key: alb
-          Value: !Join ["-", [!Ref PrefixName, "alb"]]
+      Port: 7000
+      Protocol: HTTP
+      Name: !Join ["-", [!Ref PrefixName, "HTTP-Target"]]
+      TargetType: ip
+      VpcId: !Ref VPC
