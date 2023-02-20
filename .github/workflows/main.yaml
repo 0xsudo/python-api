@@ -25,10 +25,6 @@ jobs:
       - name: Install dependencies
         run: pip install -r app/requirements.txt
 
-      - name: Docker build
-        run: |
-          docker build -t py-api-ecr-repo:latest .
-
       - name: Build ECR stack
         run: bash cloudformation/cfn-ecr-deploy.sh
 
