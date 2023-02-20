@@ -232,8 +232,7 @@ Resources:
 
   AppTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
-    DependsOn:
-      - ApplicationLoadBalancer
+    DependsOn: ApplicationLoadBalancer
     Properties:
       HealthCheckEnabled: true
       HealthCheckIntervalSeconds: 10
