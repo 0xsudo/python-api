@@ -241,17 +241,17 @@ Resources:
   AppTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      HealthCheckEnabled: true
-      HealthCheckIntervalSeconds: 10
-      HealthCheckPath: /
-      HealthCheckProtocol: HTTP
-      HealthCheckPort: 7000
-      HealthCheckTimeoutSeconds: 5
-      HealthyThresholdCount: 2
-      UnhealthyThresholdCount: 2
+      # HealthCheckEnabled: true
+      # HealthCheckIntervalSeconds: 10
+      # HealthCheckPath: /
+      # HealthCheckProtocol: HTTP
+      # HealthCheckPort: 7000
+      # HealthCheckTimeoutSeconds: 5
+      # HealthyThresholdCount: 2
+      # UnhealthyThresholdCount: 2
       IpAddressType: ipv4
       Port: 7000
-      Protocol: HTTP
+      # Protocol: HTTP
       Name: !Join ["-", [!Ref PrefixName, "HTTP-Target"]]
       TargetType: alb
       Targets:
