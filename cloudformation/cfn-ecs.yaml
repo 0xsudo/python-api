@@ -1,8 +1,8 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Parameters:
-  # AWSAccountId:
-  #   Type: String
-  #   Description: AWS Account ID
+  AWSAccountId:
+    Type: String
+    Description: AWS Account ID
 
   VpcCIDR:
     Type: String
@@ -14,10 +14,10 @@ Parameters:
     Default: py-api
     Description: Prefixes all the resources we create
 
-  # AWSECRRepoName:
-  #   Type: String
-  #   Default: ecr-repo
-  #   Description: Name for our ECR repo
+  AWSECRRepoName:
+    Type: String
+    Default: ecr-repo
+    Description: Name for our ECR repo
 
 Resources:
   Cluster:
