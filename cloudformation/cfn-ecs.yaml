@@ -1,8 +1,8 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Parameters:
-  AWSAccountId:
-    Type: String
-    Description: AWS Account ID
+  # AWSAccountId:
+  #   Type: String
+  #   Description: AWS Account ID
 
   VpcCIDR:
     Type: String
@@ -14,10 +14,10 @@ Parameters:
     Default: py-api
     Description: Prefixes all the resources we create
 
-  AWSECRRepoName:
-    Type: String
-    Default: ecr-repo
-    Description: Name for our ECR repo
+  # AWSECRRepoName:
+  #   Type: String
+  #   Default: ecr-repo
+  #   Description: Name for our ECR repo
 
 Resources:
   Cluster:
@@ -112,9 +112,9 @@ Resources:
       NetworkMode: awsvpc
       ExecutionRoleArn: !GetAtt ExecutionRole.Arn
       ContainerDefinitions:
-        - Name: !Join ["-", [!Ref PrefixName, "container"]]  
-          #Image: [id].dkr.ecr.[region].amazonaws.com/our-cfn-repo:latest
-          Image: !Join ["", [!Ref AWSAccountId,".dkr.ecr",!Ref AWS::Region,".amazonaws.com/",!Ref PrefixName,"-",!Ref AWSECRRepoName,":","latest"]]
+        - Name: !Join ["-", [!Ref PrefixName, "container"]]
+          #Image: !Join ["", [!Ref AWSAccountId,".dkr.ecr",!Ref AWS::Region,".amazonaws.com/",!Ref PrefixName,"-",!Ref AWSECRRepoName,":","latest"]]
+          Image: 636181284446.dkr.ecr.us-east-1.amazonaws.com/py-api-ecr-repo:latest
           PortMappings:
             - ContainerPort: 7000
           LogConfiguration:
@@ -215,20 +215,20 @@ Resources:
       Port: 80
       Protocol: HTTP
 
-  ListernerRuleForTargetGroup:
-    Type: AWS::ElasticLoadBalancingV2::ListenerRule
-    Properties:
-      Actions:
-        - Type: forward
-          TargetGroupArn: !Ref AppTargetGroup
-      Priority: 1
-      Conditions:
-        - Field: http-header
-          HttpHeaderConfig:
-            HttpHeaderName: X-App-Name
-            Values:
-              - app
-      ListenerArn: !Ref HTTPListner
+  # ListernerRuleForTargetGroup:
+  #   Type: AWS::ElasticLoadBalancingV2::ListenerRule
+  #   Properties:
+  #     Actions:
+  #       - Type: forward
+  #         TargetGroupArn: !Ref AppTargetGroup
+  #     Priority: 1
+  #     Conditions:
+  #       - Field: http-header
+  #         HttpHeaderConfig:
+  #           HttpHeaderName: X-App-Name
+  #           Values:
+  #             - app
+  #     ListenerArn: !Ref HTTPListner
 
   AppTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
