@@ -240,7 +240,6 @@ Resources:
 
   AppTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
-    DependsOn: ApplicationLoadBalancer
     Properties:
       HealthCheckEnabled: true
       HealthCheckIntervalSeconds: 10
@@ -254,5 +253,7 @@ Resources:
       Port: 7000
       Protocol: HTTP
       Name: !Join ["-", [!Ref PrefixName, "HTTP-Target"]]
-      TargetType: ip
+      TargetType: alb
+      Targets:
+        - Id: !Ref ApplicationLoadBalancer
       VpcId: !Ref VPC
