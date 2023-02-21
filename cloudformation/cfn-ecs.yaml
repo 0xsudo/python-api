@@ -150,10 +150,10 @@ Resources:
             - !Ref Subnet2
           SecurityGroups:
             - !Ref ALBSecurityGroup
-      LoadBalancers:
-        - ContainerName: !Join ["-", [!Ref PrefixName, "container"]]
-          TargetGroupArn: !Ref AppTargetGroup
-          ContainerPort: 7000
+      # LoadBalancers:
+      #   - ContainerName: !Join ["-", [!Ref PrefixName, "container"]]
+      #     TargetGroupArn: !Ref AppTargetGroup
+      #     ContainerPort: 7000
 
   ALBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -207,21 +207,21 @@ Resources:
         - Key: alb
           Value: !Join ["-", [!Ref PrefixName, "alb"]]
 
-  HTTPListner:
-    Type: AWS::ElasticLoadBalancingV2::Listener
-    Properties:
-      DefaultActions:
-        - Type: redirect
-          RedirectConfig:
-            StatusCode: HTTP_301
-            Protocol: HTTPS
-            Port: 443
-            Host: "#{host}"
-            Path: /#{path}
-            Query: "#{query}"
-      LoadBalancerArn: !Ref ApplicationLoadBalancer
-      Port: 80
-      Protocol: HTTP
+  # HTTPListner:
+  #   Type: AWS::ElasticLoadBalancingV2::Listener
+  #   Properties:
+  #     DefaultActions:
+  #       - Type: redirect
+  #         RedirectConfig:
+  #           StatusCode: HTTP_301
+  #           Protocol: HTTPS
+  #           Port: 443
+  #           Host: "#{host}"
+  #           Path: /#{path}
+  #           Query: "#{query}"
+  #     LoadBalancerArn: !Ref ApplicationLoadBalancer
+  #     Port: 80
+  #     Protocol: HTTP
 
   # ListernerRuleForTargetGroup:
   #   Type: AWS::ElasticLoadBalancingV2::ListenerRule
@@ -238,22 +238,21 @@ Resources:
   #             - app
   #     ListenerArn: !Ref HTTPListner
 
-  AppTargetGroup:
-    Type: AWS::ElasticLoadBalancingV2::TargetGroup
-    Properties:
-      # HealthCheckEnabled: true
-      # HealthCheckIntervalSeconds: 10
-      # HealthCheckPath: /
-      # HealthCheckProtocol: HTTP
-      # HealthCheckPort: 7000
-      # HealthCheckTimeoutSeconds: 5
-      # HealthyThresholdCount: 2
-      # UnhealthyThresholdCount: 2
-      IpAddressType: ipv4
-      Port: 7000
-      Protocol: HTTP, HTTPS
-      Name: !Join ["-", [!Ref PrefixName, "HTTP-Target"]]
-      TargetType: alb
-      Targets:
-        - Id: !Ref ApplicationLoadBalancer
-      VpcId: !Ref VPC
+  # AppTargetGroup:
+  #   Type: AWS::ElasticLoadBalancingV2::TargetGroup
+  #   DependsOn: ApplicationLoadBalancer
+  #   Properties:
+  #     # HealthCheckEnabled: true
+  #     # HealthCheckIntervalSeconds: 10
+  #     # HealthCheckPath: /
+  #     # HealthCheckProtocol: HTTP
+  #     # HealthCheckPort: 7000
+  #     # HealthCheckTimeoutSeconds: 5
+  #     # HealthyThresholdCount: 2
+  #     # UnhealthyThresholdCount: 2
+  #     IpAddressType: ipv4
+  #     Port: 7000
+  #     Protocol: HTTP
+  #     Name: !Join ["-", [!Ref PrefixName, "HTTP-Target"]]
+  #     TargetType: ip
+  #     VpcId: !Ref VPC
