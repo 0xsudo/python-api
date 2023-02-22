@@ -245,7 +245,7 @@ Resources:
       # HealthCheckEnabled: true
       # HealthCheckIntervalSeconds: 10
       # HealthCheckPath: /
-      # HealthCheckProtocol: HTTP
+      HealthCheckProtocol: HTTP
       HealthCheckPort: 7000
       # HealthCheckTimeoutSeconds: 5
       # HealthyThresholdCount: 2
