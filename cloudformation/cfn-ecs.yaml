@@ -76,15 +76,15 @@ Resources:
           - 0
           - Fn::GetAZs: !Ref AWS::Region
 
-  Subnet2: 
-    Type: "AWS::EC2::Subnet"
-    Properties: 
-      VpcId: 
-        !Ref VPC
-      CidrBlock: 10.0.1.0/24
-      AvailabilityZone: !Select
-          - 1
-          - Fn::GetAZs: !Ref AWS::Region
+  # Subnet2: 
+  #   Type: "AWS::EC2::Subnet"
+  #   Properties: 
+  #     VpcId: 
+  #       !Ref VPC
+  #     CidrBlock: 10.0.1.0/24
+  #     AvailabilityZone: !Select
+  #         - 1
+  #         - Fn::GetAZs: !Ref AWS::Region
 
   ContainerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -147,7 +147,7 @@ Resources:
           AssignPublicIp: ENABLED
           Subnets:
             - !Ref Subnet1
-            - !Ref Subnet2
+            # - !Ref Subnet2
           SecurityGroups:
             - !Ref ALBSecurityGroup
       # LoadBalancers:
