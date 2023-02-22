@@ -97,19 +97,19 @@ Resources:
           FromPort: 7000
           ToPort: 7000
           SourceSecurityGroupId: !GetAtt ALBSecurityGroup.GroupId
-        - IpProtocol: tcp
-          FromPort: 443
-          ToPort: 443
-          SourceSecurityGroupId: !GetAtt ALBSecurityGroup.GroupId
+        # - IpProtocol: tcp
+        #   FromPort: 443
+        #   ToPort: 443
+        #   SourceSecurityGroupId: !GetAtt ALBSecurityGroup.GroupId
       SecurityGroupEgress:
         - IpProtocol: tcp
           FromPort: 7000
           ToPort: 7000
           CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: 443
-          ToPort: 443
-          CidrIp: 0.0.0.0/0
+        # - IpProtocol: tcp
+        #   FromPort: 443
+        #   ToPort: 443
+        #   CidrIp: 0.0.0.0/0
 
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition
@@ -121,8 +121,8 @@ Resources:
       ExecutionRoleArn: !GetAtt ExecutionRole.Arn
       ContainerDefinitions:
         - Name: !Join ["-", [!Ref PrefixName, "container"]]
-          #Image: !Join ["", [!Ref AWSAccountId,".dkr.ecr",!Ref AWS::Region,".amazonaws.com/",!Ref PrefixName,"-",!Ref AWSECRRepoName,":","latest"]]
-          Image: 636181284446.dkr.ecr.us-east-1.amazonaws.com/py-api-ecr-repo:latest
+          Image: !Join ["", [!Ref AWSAccountId,".dkr.ecr",!Ref AWS::Region,".amazonaws.com/",!Ref PrefixName,"-",!Ref AWSECRRepoName,":","latest"]]
+          #Image: 636181284446.dkr.ecr.us-east-1.amazonaws.com/py-api-ecr-repo:latest
           PortMappings:
             - ContainerPort: 7000
           LogConfiguration:
@@ -165,47 +165,47 @@ Resources:
           Key: alb-sg
       VpcId: !Ref VPC
       SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: 443
-          ToPort: 443
-          CidrIp: 0.0.0.0/0
+        # - IpProtocol: tcp
+        #   FromPort: 80
+        #   ToPort: 80
+        #   CidrIp: 0.0.0.0/0
+        # - IpProtocol: tcp
+        #   FromPort: 443
+        #   ToPort: 443
+        #   CidrIp: 0.0.0.0/0
         - IpProtocol: tcp
           FromPort: 7000
           ToPort: 7000
           CidrIp: 0.0.0.0/0
       SecurityGroupEgress:
-        - CidrIp: 0.0.0.0/0
-          FromPort: 80
-          IpProtocol: tcp
-          ToPort: 80
-        - CidrIp: 0.0.0.0/0
-          FromPort: 443
-          IpProtocol: tcp
-          ToPort: 443
+        # - CidrIp: 0.0.0.0/0
+        #   FromPort: 80
+        #   IpProtocol: tcp
+        #   ToPort: 80
+        # - CidrIp: 0.0.0.0/0
+        #   FromPort: 443
+        #   IpProtocol: tcp
+        #   ToPort: 443
         - IpProtocol: tcp
           FromPort: 7000
           ToPort: 7000
           CidrIp: 0.0.0.0/0
 
-  ApplicationLoadBalancer:
-    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
-    Properties:
-      Name: !Join ["-", [!Ref PrefixName, "alb"]]
-      Scheme: internet-facing
-      Type: application
-      Subnets:
-        - !Ref Subnet1
-        - !Ref Subnet2
-      SecurityGroups:
-        - !Ref ALBSecurityGroup
-      IpAddressType: ipv4
-      Tags:
-        - Key: alb
-          Value: !Join ["-", [!Ref PrefixName, "alb"]]
+  # ApplicationLoadBalancer:
+  #   Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+  #   Properties:
+  #     Name: !Join ["-", [!Ref PrefixName, "alb"]]
+  #     Scheme: internet-facing
+  #     Type: application
+  #     Subnets:
+  #       - !Ref Subnet1
+  #       - !Ref Subnet2
+  #     SecurityGroups:
+  #       - !Ref ALBSecurityGroup
+  #     IpAddressType: ipv4
+  #     Tags:
+  #       - Key: alb
+  #         Value: !Join ["-", [!Ref PrefixName, "alb"]]
 
   # HTTPListner:
   #   Type: AWS::ElasticLoadBalancingV2::Listener
