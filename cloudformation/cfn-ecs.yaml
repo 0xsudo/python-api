@@ -123,8 +123,8 @@ Resources:
       ExecutionRoleArn: !GetAtt ExecutionRole.Arn
       ContainerDefinitions:
         - Name: !Join ["-", [!Ref PrefixName, "container"]]
-          #Image: !Join ["", [!Ref AWSAccountId,".dkr.ecr",!Ref AWS::Region,".amazonaws.com/",!Ref PrefixName,"-",!Ref AWSECRRepoName,":","latest"]]
-          Image: 636181284446.dkr.ecr.us-east-1.amazonaws.com/py-api-ecr-repo:latest
+          Image: !Join ["", [!Ref AWSAccountId,".dkr.ecr",!Ref AWS::Region,".amazonaws.com/",!Ref PrefixName,"-",!Ref AWSECRRepoName,":","latest"]]
+          #Image: [aws-acc-id].dkr.[region].amazonaws.com/py-api-ecr-repo:latest
           PortMappings:
             - ContainerPort: 7000
           LogConfiguration:
