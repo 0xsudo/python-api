@@ -3,7 +3,7 @@
 #define our environment variables
 STACK_NAME=cfn-ecr-py-api
 AWS_REGION=us-east-1
-AWS_ACCOUNT_ID=636181284446
+AWS_ACCOUNT_ID=[aws-acc-id]
 IMAGE_NAME=py-api-ecr-repo
 TAG=latest
 
