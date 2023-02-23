@@ -1,11 +1,11 @@
-Example Uber app for developers
-==============================
+Uber auth app to prod 
+=====================
 
 We will be pushing a Python Flask authetication application that uses Uber's external authetication API to production on AWS using ECS and Fargate.
 We will be using GitHub Actions to run our pipeline.
 
-How To Use This
----------------
+How to use 
+----------
 NOTE: You will need to  ahve a valid uber organization account to access the 0 auth scopes.
 
 1. Navigate over to https://developer.uber.com/, and sign up for an Uber developer account.
@@ -33,8 +33,8 @@ Assumptions to complete this tutorial:
 7. A key pair generated from the AWS Console.
 8. Python3 and pip installed.
 
-Initial setup
--------------
+Setup
+-----
 
 Create a remote repo on GitHub with the same directory name you choose for the cloned repo, then connect to it either using HTTPs or SSH and switch to the dev branch.
 
