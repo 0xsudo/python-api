@@ -1,11 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
 Parameters:
-  AWSAccountId:
-    Type: String
-    Description: AWS Account ID
-  AWSECRAdminUser:
-    Type: String
-    Description: Admin User who can push ECR images
   AWSECRRepoName:
     Type: String
     Description: ECR Repository Name
