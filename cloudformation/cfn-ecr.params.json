@@ -1,7 +1,7 @@
 [
     {
       "ParameterKey": "AWSAccountId",
-      "ParameterValue": "636181284446"
+      "ParameterValue": "[aws-acc-id]"
     },
     {
       "ParameterKey": "AWSECRAdminUser",
