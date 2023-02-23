@@ -1,19 +1,8 @@
-# python-api-app
-pushing the uber login api to production on AWS
-
 Example Uber app for developers
 ==============================
 
-[![TravisCI](https://travis-ci.org/uber/Python-Sample-Application.svg?branch=master)](https://travis-ci.org/uber/Python-Sample-Application)
-[![Coverage Status](https://coveralls.io/repos/uber/Python-Sample-Application/badge.png)](https://coveralls.io/r/uber/Python-Sample-Application)
-
-https://developer.uber.com/
-
-What Is This?
--------------
-
-This is a Python Flask application intended to provide a working example of Uber's external API. The goal of these endpoints is to be simple, well-documented and to provide a base for developers to develop other applications off of.
-
+We will be pushing a Python Flask authetication application that uses Uber's external authetication API to production on AWS using ECS and Fargate.
+We will be using GitHub Actions to run our pipeline.
 
 How To Use This
 ---------------
@@ -27,10 +16,42 @@ NOTE: You will need to  ahve a valid uber organization account to access the 0 a
 6. Run `python app.py`
 7. Navigate to http://localhost:7000 in your browser
 
-
 Testing
 -------
 
 1. Install the dependencies with `make bootstrap`
 2. Run the command `make test`
 3. If you delete the fixtures, or decide to add some of your own, you’ll have to re-generate them, and the way this is done is by running the app, getting an auth_token from the main page of the app. Paste that token in place of the `test_auth_token` at the top of the `test_endpoints.py` file, then run the tests.
+
+Additional instructions
+-----------------------
+Assumptions to complete this tutorial:
+1. You have an AWS account set up and have an IAM profile with admin permissions setup locally for the AWS CLI (your acc should have funds to provision lb and fargate).
+3. GitHub's account and Git setup locally with ssh keys.
+5. Docker Installed.
+6. Basic knowledge of VPC networking.
+7. A key pair generated from the AWS Console.
+8. Python3 and pip installed.
+
+Initial setup
+-------------
+
+Create a remote repo on GitHub with the same directory name you choose for the cloned repo, then connect to it either using HTTPs or SSH and switch to the dev branch.
+
+- `git clone https://github.com/0xsudo/python-api.git`
+- `cd python-api`
+- `git init`
+- `git remote add origin https://github.com/<USER>/<REPO>.git` #change accordingly
+- `git checkout -b dev`
+
+Go into the cloudformation directory and update with the necessary `[aws-acc-id]`, you can get this by running `aws sts get-caller-identity` on your terminal.
+
+Note that in the `.github/workflows/main.yaml` our workflow is triggered using a `pull_request`, you can change this to your desired action like `push`.
+
+Once you save the changes:
+
+ - `git add .`
+ - `git commit -m "relevant message"`
+ - `git push origin dev`
+
+ Go into our repo on GitHub, create a `pull request` and `merge` into the main brach or any other, this `action` will trigger our `workflow`, go into `actions` tab to view the workflow steps.
