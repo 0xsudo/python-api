@@ -1,7 +1,7 @@
-Uber auth app to prod 
-=====================
+Python application to prod 
+==========================
 
-We will be pushing a Python Flask authetication application that uses Uber's external authetication API to production on AWS using ECS and Fargate.
+We will be pushing a Python Flask application that uses Uber's external authetication API to production on AWS using ECS and Fargate.
 We will be using GitHub Actions to run our pipeline.
 
 How to use 
