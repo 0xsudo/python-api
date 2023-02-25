@@ -41,7 +41,7 @@ Create a remote repo on GitHub with the same directory name you choose for the c
 - `git clone https://github.com/0xsudo/python-api.git`
 - `cd python-api`
 - `git init`
-- `git remote add origin https://github.com/<USER>/<REPO>.git` #change accordingly
+- `git remote add origin https://github.com/<USER-NAME>/<REPO>.git` #change accordingly
 - `git checkout -b dev`
 
 Go into the cloudformation directory and update with the necessary `[aws-acc-id]`, you can get this by running `aws sts get-caller-identity` on your terminal.
