@@ -25,6 +25,10 @@ jobs:
       - name: Install dependencies
         run: pip install -r app/requirements.txt
 
+#add vulnerability scanning step
+
+#add report generating step
+
       - name: Build ECR stack
         run: bash cloudformation/cfn-ecr-deploy.sh
 
