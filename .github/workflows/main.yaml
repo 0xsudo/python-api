@@ -25,26 +25,62 @@ jobs:
       - name: Install dependencies
         run: pip install -r app/requirements.txt
 
-#add vulnerability scanning step
+      - name: Run code tests
+        run: coverage run -m pytest app/test/
 
-#add report generating step
+      - name: Generate the test report
+        run: coverage report > coverage-test-report
 
-      - name: Build ECR stack
-        run: bash cloudformation/cfn-ecr-deploy.sh
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+      - name: Upload test report
+        uses: actions/upload-artifact@v3
+        if: ${{ always }}
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+          name: pyhton test report
+          path: coverage-test-report
 
-      - name: Build ECS stack
-        run: bash cloudformation/cfn-ecs-deploy.sh
+      - name: Build docker image
+        run: docker build -t py-api-ecr-repo:latest .
+
+      - name: Scan docker image
+        uses: anchore/scan-action@v3
+        id: scan
+        with:
+          image: py-api-ecr-repo:latest
+          fail-build: true
+          severity-cutoff: medium # fail if severity is medium and above
+
+      - name: upload Anchore scan SARIF report
+        uses: github/codeql-action/upload-sarif@v2
+        if: ${{ always }}
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif }}
+
+      - name: Upload vulnerability report
+        uses: actions/upload-artifact@v3
+        if: ${{ always }}
+        with:
+          name: vulnerability report
+          path: outputs.sarif
+
+      - name: Inspect action SARIF report
+        run: cat ${{ steps.scan.outputs.sarif }}
+
+      # - name: Build ECR stack
+      #   run: bash cloudformation/cfn-ecr-deploy.sh
+
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   needs: build
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+        
+  #     - name: Configure AWS credentials
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: us-east-1
+
+  #     - name: Build ECS stack
+  #       run: bash cloudformation/cfn-ecs-deploy.sh
