@@ -33,7 +33,7 @@ jobs:
 
       - name: Upload test report
         uses: actions/upload-artifact@v3
-        if: ${{ always }}
+        if: ${{ always() }}
         with:
           name: pyhton test report
           path: coverage-test-report
@@ -51,13 +51,13 @@ jobs:
 
       - name: upload Anchore scan SARIF report
         uses: github/codeql-action/upload-sarif@v2
-        if: ${{ always }}
+        if: ${{ always() }}
         with:
           sarif_file: ${{ steps.scan.outputs.sarif }}
 
       - name: Upload vulnerability report
         uses: actions/upload-artifact@v3
-        if: ${{ always }}
+        if: ${{ always() }}
         with:
           name: vulnerability report
           path: outputs.sarif
