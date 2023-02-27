@@ -1,6 +1,8 @@
 name: prod-ecs
 
-on: push
+on: push:
+      branches:
+        - main
 
 jobs:
   build:
@@ -26,10 +28,14 @@ jobs:
         run: pip install -r app/requirements.txt
 
       - name: Run code tests
-        run: coverage run -m pytest app/test/
+        run: |
+          cd app/
+          coverage run -m pytest test/
 
       - name: Generate the test report
-        run: coverage report > coverage-test-report
+        run: |
+          coverage report > coverage-test-report
+          cat coverage-test-report
 
       - name: Upload test report
         uses: actions/upload-artifact@v3
