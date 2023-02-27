@@ -47,7 +47,7 @@ jobs:
         if: ${{ always() }}
         with:
           name: pyhton test report
-          path: coverage-test-report
+          path: app/coverage-test-report
 
       - name: Build docker image
         run: docker build -t py-api-ecr-repo:latest .
@@ -56,7 +56,7 @@ jobs:
         uses: anchore/scan-action@v3
         id: scan
         with:
-          image: kaokakelvin/py-api-ecr-repo:latest
+          image: py-api-ecr-repo:latest
           fail-build: true
           severity-cutoff: medium # fail if severity is medium and above
 
