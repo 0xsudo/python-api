@@ -51,7 +51,7 @@ jobs:
       - name: Build docker image
         run: docker build -t py-api-ecr-repo:latest .
       
-      - name: Scan image
+      - name: Scan image for vulns
         uses: anchore/scan-action@v3
         id: scan
         with:
