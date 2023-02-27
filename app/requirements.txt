@@ -8,5 +8,6 @@ rauth
 requests
 urllib3
 coverage
+pytest
 gunicorn
 Flask-SSLify
