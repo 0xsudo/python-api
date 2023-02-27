@@ -8,10 +8,10 @@ COPY app /build
 
 COPY app/requirements.txt /build
 
-RUN pip install -r requirements.txt
-
 EXPOSE 7000
+
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
 USER 1000
 
-CMD [ "python", "app.py" ]
+CMD [ "python3", "app.py" ]
