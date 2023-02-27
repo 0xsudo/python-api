@@ -32,11 +32,15 @@ jobs:
         run: |
           cd app/
           coverage run -m pytest test/
+          cd ../
 
       - name: Generate the test report
+        if: ${{ always() }}
         run: |
+          cd app/
           coverage report > coverage-test-report
           cat coverage-test-report
+          cd ../
 
       - name: Upload test report
         uses: actions/upload-artifact@v3
