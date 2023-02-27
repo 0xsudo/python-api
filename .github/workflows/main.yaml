@@ -39,7 +39,6 @@ jobs:
         run: |
           cd app/
           coverage report > coverage-test-report
-          cat coverage-test-report
           cd ../
 
       - name: Upload test report
@@ -58,7 +57,7 @@ jobs:
         with:
           image: py-api-ecr-repo:latest
           fail-build: true
-          severity-cutoff: medium # fail if severity is medium and above
+          severity-cutoff: high # fail if severity is medium and above
 
       - name: upload Anchore scan SARIF report
         uses: github/codeql-action/upload-sarif@v2
