@@ -57,7 +57,7 @@ jobs:
         with:
           image: py-api-ecr-repo:latest
           fail-build: true
-          severity-cutoff: critical # fail if severity is medium and above
+          severity-cutoff: critical # fail if severity is critical
 
       - name: upload Anchore scan SARIF report
         uses: github/codeql-action/upload-sarif@v2
