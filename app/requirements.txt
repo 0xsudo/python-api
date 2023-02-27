@@ -7,6 +7,6 @@ itsdangerous
 rauth
 requests
 urllib3
-
+coverage
 gunicorn
 Flask-SSLify
