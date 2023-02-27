@@ -52,7 +52,7 @@ jobs:
         uses: anchore/scan-action@v3
         id: scan
         with:
-          image: py-api-ecr-repo:latest
+          image: kaokakelvin/py-api-ecr-repo:latest
           fail-build: true
           severity-cutoff: medium # fail if severity is medium and above
 
