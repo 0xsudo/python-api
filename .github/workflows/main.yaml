@@ -50,14 +50,14 @@ jobs:
 
       - name: Build docker image
         run: docker build -t py-api-ecr-repo:latest .
-
-      - name: Scan docker image
+      
+      - name: Scan image
         uses: anchore/scan-action@v3
         id: scan
         with:
           image: py-api-ecr-repo:latest
           fail-build: false
-          severity-cutoff: high # fail if severity is high
+          # severity-cutoff: high # fail if severity is high
 
       - name: upload Anchore scan SARIF report
         uses: github/codeql-action/upload-sarif@v2
