@@ -88,7 +88,7 @@ jobs:
         if: ${{ always() }}
         with:
           name: vulnerability report
-          path: outputs.sarif
+          path: outputs/sarif
 
       - name: Inspect action SARIF report
         run: cat ${{ steps.scan.outputs.sarif }}
