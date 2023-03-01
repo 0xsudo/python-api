@@ -69,7 +69,7 @@ jobs:
         uses: anchore/scan-action@v3
         id: scan
         with:
-          image: py-api-ecr-repo:latest
+          image: py-api-ecr-repo
           fail-build: false
           severity-cutoff: critical # fail if severity is high
 
