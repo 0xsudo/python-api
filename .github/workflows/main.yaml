@@ -60,7 +60,8 @@ jobs:
           tags: py-api-ecr-repo:latest
           push: false
           load: true
-      
+          
+      #You will need to enable codeql scanning from settings
       - name: Scan image for vulns
         uses: anchore/scan-action@v3
         id: scan
@@ -71,7 +72,6 @@ jobs:
 
       - name: upload Anchore scan SARIF report
         uses: github/codeql-action/upload-sarif@v2
-        if: ${{ always() }}
         with:
           sarif_file: ${{ steps.scan.outputs.sarif }}
 
@@ -84,6 +84,13 @@ jobs:
 
       - name: Inspect action SARIF report
         run: cat ${{ steps.scan.outputs.sarif }}
+
+      - name: Create an issue if workflow fails
+        if: ${{ failure() }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue create --title "Failure on workflow: ${{ github.workflow }} - ${{ github.sha }}" --body "failure on job: ${{ github.job }}"
 
       # - name: Build ECR stack
       #   run: bash cloudformation/cfn-ecr-deploy.sh
