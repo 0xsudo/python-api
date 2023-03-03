@@ -106,7 +106,7 @@ jobs:
       - name: Scan SBOM
         uses: anchore/scan-action@v3
         with:
-          sbom: ${{ github.event.repository.name }}-sbom.spdx.json
+          sbom: py-api-ecr-repo_latest.spdx.json
 
       - name: Create an issue if workflow fails
         if: ${{ failure() }}
