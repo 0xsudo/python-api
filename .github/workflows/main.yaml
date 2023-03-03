@@ -101,7 +101,8 @@ jobs:
         uses: anchore/sbom-action@v0
         with:
           path: .
-          image: py-api-ecr-repo:latest
+          image: python:latest
+          # image: py-api-ecr-repo:latest
           format: spdx-json
           output-file: ${{ github.event.repository.name }}-sbom.spdx.json
 
@@ -110,7 +111,7 @@ jobs:
         uses: anchore/scan-action@v3
         with:
           sbom: ${{ github.event.repository.name }}-sbom.spdx.json
-          fail-build: false
+          fail-build: true
           severity-cutoff: critical
 
       - name: Create an issue if workflow fails
