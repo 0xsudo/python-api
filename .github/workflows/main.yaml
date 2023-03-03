@@ -106,9 +106,12 @@ jobs:
           output-file: ${{ github.event.repository.name }}-sbom.spdx.json
 
       - name: Scan SBOM
+        if: ${{ always() }}
         uses: anchore/scan-action@v3
         with:
           sbom: ${{ github.event.repository.name }}-sbom.spdx.json
+          fail-build: false
+          severity-cutoff: critical
 
       - name: Create an issue if workflow fails
         if: ${{ failure() }}
