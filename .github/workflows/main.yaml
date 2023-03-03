@@ -61,45 +61,58 @@ jobs:
       #     push: false
       #     load: true
 
-      #You will need to enable codeql scanning from security settings
-
       # - name: Scan image for vulns
       #   uses: anchore/scan-action@v3
       #   id: scan
       #   with:
+      #     path: "."
       #     image: py-api-ecr-repo
       #     fail-build: false
-      #     severity-cutoff: critical # fail if severity is high
+      #     severity-cutoff: low # set severity to low
 
-      - name: Scan entire project
+      # - name: Scan entire project
+      #   uses: anchore/scan-action@v3
+      #   with:
+      #     fail-build: false
+      #     severity-cutoff: low
+      
+      # - name: upload Anchore scan SARIF report
+      #   uses: github/codeql-action/upload-sarif@v2
+      #   with:
+      #     sarif_file: ${{ steps.scan.outputs.sarif }}
+
+      # - name: Upload vulnerability report
+      #   uses: actions/upload-artifact@v3
+      #   if: ${{ always() }}
+      #   with:
+      #     name: vulnerability report
+      #     path: results.sarif
+
+      #  - name: Inspect action SARIF report
+      #    run: cat ${{ steps.scan.outputs.sarif }}
+
+      - name: Genreate SBOM using syft
+        uses: anchore/sbom-action@v0
+        with:
+          path: .
+          image: py-api-ecr-repo:latest
+          artifact-name: sbom.spdx.json
+
+      - name: Scan SBOM
         uses: anchore/scan-action@v3
         with:
-          path: "."
-          fail-build: true
-          severity-cutoff: high
-
-      - name: upload Anchore scan SARIF report
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: ${{ steps.scan.outputs.sarif }}
-
-      - name: Upload vulnerability report
-        uses: actions/upload-artifact@v3
-        if: ${{ always() }}
-        with:
-          name: vulnerability report
-          path: sarif
-
-      - name: Inspect action SARIF report
-        run: cat ${{ steps.scan.outputs.sarif }}
+          sbom: sbom.spdx.json
 
       - name: Create an issue if workflow fails
         if: ${{ failure() }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           gh issue create --title "Failure on workflow: ${{ github.workflow }} - ${{ github.sha }}" --body "Failure on job: ${{ github.job }}"
-
+      # alternatively use github token as param:
+      # with:
+      #   repo-token: ${{ secrets.GITHUB_TOKEN }}
+          
       # - name: Build ECR stack
       #   run: bash cloudformation/cfn-ecr-deploy.sh
 
