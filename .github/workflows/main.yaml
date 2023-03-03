@@ -105,13 +105,13 @@ jobs:
 
       - name: Create an issue if workflow fails
         if: ${{ failure() }}
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+        # env:
+        #   GITHUB_TOKEN: ${{ github.token }}
         run: |
           gh issue create --title "Failure on workflow: ${{ github.workflow }} - ${{ github.sha }}" --body "Failure on job: ${{ github.job }}"
       # alternatively use github token as param:
-      # with:
-      #   repo-token: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
           
       # - name: Build ECR stack
       #   run: bash cloudformation/cfn-ecr-deploy.sh
