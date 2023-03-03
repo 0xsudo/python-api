@@ -101,12 +101,13 @@ jobs:
         with:
           path: .
           image: py-api-ecr-repo:latest
-          artifact-name: py-api.spdx.json
+          format: spdx-json
+          output-file: ${{ github.event.repository.name }}-sbom.spdx.json
 
       - name: Scan SBOM
         uses: anchore/scan-action@v3
         with:
-          sbom: py-api.spdx.json
+          sbom: ${{ github.event.repository.name }}-sbom.spdx.json
 
       - name: Create an issue if workflow fails
         if: ${{ failure() }}
