@@ -96,12 +96,12 @@ jobs:
         with:
           path: .
           image: py-api-ecr-repo:latest
-          artifact-name: sbom.spdx.json
+          # artifact-name: sbom.spdx.json
 
       - name: Scan SBOM
         uses: anchore/scan-action@v3
         with:
-          sbom: ./sbom.spdx.json
+          sbom: ${{ github.event.repository.name }}-sbom.spdx.json
 
       - name: Create an issue if workflow fails
         if: ${{ failure() }}
@@ -109,7 +109,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           gh issue create --title "Failure on workflow: ${{ github.workflow }} - ${{ github.sha }}" --body "Failure on job: ${{ github.job }}"
-                # alternatively use github token as param:
+      # alternatively use github token as param:
       # with:
       #   repo-token: ${{ secrets.GITHUB_TOKEN }}
       # - name: Build ECR stack
