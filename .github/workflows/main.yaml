@@ -106,12 +106,12 @@ jobs:
           format: spdx-json
           output-file: ${{ github.event.repository.name }}-sbom.spdx.json
 
-      - name: Scan SBOM
+      - name: Scan SBOM using grype (codeql)
         if: ${{ always() }}
         uses: anchore/scan-action@v3
         with:
           sbom: ${{ github.event.repository.name }}-sbom.spdx.json
-          fail-build: false
+          fail-build: true
           severity-cutoff: low
 
       - name: Create an issue if workflow fails
