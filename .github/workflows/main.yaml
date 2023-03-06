@@ -57,46 +57,6 @@ jobs:
       - name: Build docker image
         run: docker build -t py-api-ecr-repo:latest .
 
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v1
-
-      # - name: build local container
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     tags: py-api-ecr-repo:latest
-      #     push: false
-      #     load: true
-
-      # - name: Scan image for vulns
-      #   uses: anchore/scan-action@v3
-      #   id: scan
-      #   with:
-      #     path: "."
-      #     image: py-api-ecr-repo
-      #     fail-build: false
-      #     severity-cutoff: low # set severity to low
-
-      # - name: Scan entire project
-      #   uses: anchore/scan-action@v3
-      #   with:
-      #     fail-build: false
-      #     severity-cutoff: low
-      
-      # - name: upload Anchore scan SARIF report
-      #   uses: github/codeql-action/upload-sarif@v2
-      #   with:
-      #     sarif_file: ${{ steps.scan.outputs.sarif }}
-
-      # - name: Upload vulnerability report
-      #   uses: actions/upload-artifact@v3
-      #   if: ${{ always() }}
-      #   with:
-      #     name: vulnerability report
-      #     path: results.sarif
-
-      #  - name: Inspect action SARIF report
-      #    run: cat ${{ steps.scan.outputs.sarif }}
-
       - name: Genreate SBOM using syft
         uses: anchore/sbom-action@v0
         with:
