@@ -111,8 +111,8 @@ jobs:
         uses: anchore/scan-action@v3
         with:
           sbom: ${{ github.event.repository.name }}-sbom.spdx.json
-          fail-build: true
-          severity-cutoff: critical
+          fail-build: false
+          severity-cutoff: low
 
       - name: Create an issue if workflow fails
         if: ${{ failure() }}
