@@ -7,7 +7,7 @@ AWS_ACCOUNT_ID=[aws-acc-id]
 IMAGE_NAME=py-api-ecr-repo
 TAG=latest
 
-#login to ECR using DockerHub
+#login to ECR using Docker credentials generated from AWS creds
 aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
 
 #build our image
