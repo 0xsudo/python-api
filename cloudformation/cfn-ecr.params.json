@@ -1,9 +1,5 @@
 [
     {
-      "ParameterKey": "AWSAccountId",
-      "ParameterValue": "636181284446"
-    },
-    {
       "ParameterKey": "PrefixName",
       "ParameterValue": "py-api"
     },
@@ -11,4 +7,4 @@
       "ParameterKey": "AWSECRRepoName",
       "ParameterValue": "ecr-repo"
     }
-  ]
+]
