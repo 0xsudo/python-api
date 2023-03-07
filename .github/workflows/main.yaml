@@ -83,8 +83,8 @@ jobs:
       # alternatively use github token as param:
       # with:
       #   repo-token: ${{ secrets.GITHUB_TOKEN }}
-      # - name: Build ECR stack
-      #   run: bash cloudformation/cfn-ecr-deploy.sh
+      - name: Build ECR stack
+        run: bash cloudformation/cfn-ecr-deploy.sh
 
   # deploy:
   #   runs-on: ubuntu-latest
