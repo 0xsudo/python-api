@@ -4,10 +4,6 @@
       "ParameterValue": "636181284446"
     },
     {
-      "ParameterKey": "AWSECRAdminUser",
-      "ParameterValue": "devopsrole"
-    },
-    {
       "ParameterKey": "PrefixName",
       "ParameterValue": "py-api"
     },
